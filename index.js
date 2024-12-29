@@ -9,7 +9,13 @@ const app = express();
 
 const server = http.createServer(app);
 
-const io = socket(server);
+const io = socket(server, {
+  cors: {
+    origin: "*", // Adjust to match your client domain
+    methods: ["GET", "POST"],
+  },
+});
+
 const PORT = process.env.PORT || 4000
 
 const chess = new Chess();
@@ -17,7 +23,7 @@ let players = {};
 let currentPlayer = "w";
 
 app.set("view engine", "ejs");
-app.set("views", path.resolve("./views"));
+app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
